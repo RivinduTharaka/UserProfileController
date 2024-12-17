@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Box, TextField, Button, Checkbox, FormControlLabel, Typography, Paper, Link } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { useNavigate } from 'react-router-dom';
 
 // Custom styling for the Paper component
 const StyledPaper = styled(Paper)({
@@ -15,6 +16,8 @@ const StyledPaper = styled(Paper)({
   boxShadow: '0px 10px 20px rgba(0, 0, 0, 0.1)', // Soft shadow
 });
 
+
+
 const Loginpage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -24,6 +27,14 @@ const Loginpage = () => {
     console.log('Email:', email, 'Password:', password);
     // Implement login logic here
   };
+
+  const navigate = useNavigate();
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    navigate('/home');
+  };
+
 
   return (
     <Box
@@ -97,6 +108,7 @@ const Loginpage = () => {
             type="submit"
             fullWidth
             variant="contained"
+            onClick={handleLogin}
             sx={{
               mt: 2,
               mb: 2,
