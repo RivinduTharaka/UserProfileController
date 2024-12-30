@@ -4,7 +4,7 @@ import Navbar from '../Componants/Navbar';
 import {
   Box, Typography, Table, TableBody, TableCell, TableContainer,
   TableHead, TableRow, Paper, TextField, Button, Select, MenuItem,
-  Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, OutlinedInput, Chip
+  Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, OutlinedInput, Chip, Checkbox
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
@@ -34,7 +34,7 @@ const initialUserData = [
   },
 ];
 
-const departments = ['HR', 'Finance', 'IT', 'Marketing'];
+const departments = ['HR', 'Finance', 'IT', 'Marketing', 'CHR', 'DFinance', 'MIT', 'AMarketing'];
 const businessUnits = ['Operations', 'Sales', 'Support'];
 
 function Home() {
@@ -58,6 +58,10 @@ function Home() {
     businessUnit: [],
     status: 'Enable',
   });
+  const [tempDepartments, setTempDepartments] = useState([]); // Temporary state for departments
+  const [deptSelectorOpen, setDeptSelectorOpen] = useState(false); // Controls dropdown open/close state
+  const [tempBusinessUnits, setTempBusinessUnits] = useState([]); // Temporary state for business units
+  const [businessUnitSelectorOpen, setBusinessUnitSelectorOpen] = useState(false); // Controls dropdown open/close state for business units
 
   // Search filter
   const filteredData = data.filter((item) =>
@@ -103,7 +107,7 @@ function Home() {
 
   // Handle Add New User
   const handleAddUser = () => {
-    setData((prevData) => [...prevData, newUser]);
+    setData((prevData) => [...prevData, { ...newUser, department: tempDepartments, businessUnit: tempBusinessUnits }]);
     setOpenAddDialog(false);
     setNewUser({
       empId: '',
@@ -116,6 +120,8 @@ function Home() {
       businessUnit: [],
       status: 'Enable',
     });
+    setTempDepartments([]);
+    setTempBusinessUnits([]);
   };
 
   return (
@@ -153,74 +159,74 @@ function Home() {
             </Box>
 
             <TableContainer component={Paper} sx={{ borderRadius: 2, boxShadow: 1 }}>
-  <Table>
-    {/* Table Header */}
-    <TableHead>
-      <TableRow sx={{ bgcolor: '#f5f5f5' }}>
-        <TableCell sx={{ maxWidth: 50 }}>No</TableCell>
-        <TableCell sx={{ maxWidth: 10 }}>EmpID</TableCell>
-        <TableCell sx={{ maxWidth: 100 }}>Username</TableCell>
-        <TableCell sx={{ maxWidth: 100 }}>Fullname</TableCell>
-        <TableCell sx={{ maxWidth: 100 }}>Email</TableCell>
-        <TableCell sx={{ maxWidth: 100 }}>Telephone</TableCell>
-        <TableCell sx={{ maxWidth: 100 }}>Role</TableCell>
-        <TableCell sx={{ maxWidth: 130 }}>Department</TableCell>
-        <TableCell sx={{ maxWidth: 130 }}>Business Unit</TableCell>
-        <TableCell sx={{ maxWidth: 100 }}>Status</TableCell>
-        <TableCell sx={{ maxWidth: 100 }}>Update</TableCell>
-      </TableRow>
-    </TableHead>
+              <Table>
+                {/* Table Header */}
+                <TableHead>
+                  <TableRow sx={{ bgcolor: '#f5f5f5' }}>
+                    <TableCell sx={{ maxWidth: 50 }}>No</TableCell>
+                    <TableCell sx={{ maxWidth: 10 }}>EmpID</TableCell>
+                    <TableCell sx={{ maxWidth: 100 }}>Username</TableCell>
+                    <TableCell sx={{ maxWidth: 100 }}>Fullname</TableCell>
+                    <TableCell sx={{ maxWidth: 100 }}>Email</TableCell>
+                    <TableCell sx={{ maxWidth: 100 }}>Telephone</TableCell>
+                    <TableCell sx={{ maxWidth: 100 }}>Role</TableCell>
+                    <TableCell sx={{ maxWidth: 130 }}>Department</TableCell>
+                    <TableCell sx={{ maxWidth: 130 }}>Business Unit</TableCell>
+                    <TableCell sx={{ maxWidth: 100 }}>Status</TableCell>
+                    <TableCell sx={{ maxWidth: 100 }}>Update</TableCell>
+                  </TableRow>
+                </TableHead>
 
-    {/* Table Body */}
-    <TableBody>
-      {filteredData.map((row, index) => (
-        <TableRow key={index} hover>
-          <TableCell sx={{ maxWidth: 50 }}>{index + 1}</TableCell>
-          <TableCell sx={{ maxWidth: 50, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-            {row.empId}
-          </TableCell>
-          <TableCell sx={{ maxWidth: 100, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-            {row.username}
-          </TableCell>
-          <TableCell sx={{ maxWidth: 100, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-            {row.fullname}
-          </TableCell>
-          <TableCell sx={{ maxWidth: 100, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-            {row.email}
-          </TableCell>
-          <TableCell sx={{ maxWidth: 100 }}>{row.telephone}</TableCell>
-          <TableCell sx={{ maxWidth: 100 }}>{row.role}</TableCell>
-          <TableCell sx={{ maxWidth: 130, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-            {row.department.join(', ')}
-          </TableCell>
-          <TableCell sx={{ maxWidth: 130, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-            {row.businessUnit.join(', ')}
-          </TableCell>
-          <TableCell sx={{ maxWidth: 100 }}>
-            <Button
-              variant="contained"
-              color={row.status === 'Enable' ? 'success' : 'error'}
-              onClick={() => toggleStatus(row.empId)}
-              size="small"
-            >
-              {row.status}
-            </Button>
-          </TableCell>
-          <TableCell sx={{ maxWidth: 100 }}>
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={() => handleOpenEdit(row)}
-              size="small"
-            >
-              Update
-            </Button>
-          </TableCell>
-        </TableRow>
-      ))}
-    </TableBody>
-  </Table>
-</TableContainer>
+                {/* Table Body */}
+                <TableBody>
+                  {filteredData.map((row, index) => (
+                    <TableRow key={index} hover>
+                      <TableCell sx={{ maxWidth: 50 }}>{index + 1}</TableCell>
+                      <TableCell sx={{ maxWidth: 50, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        {row.empId}
+                      </TableCell>
+                      <TableCell sx={{ maxWidth: 100, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        {row.username}
+                      </TableCell>
+                      <TableCell sx={{ maxWidth: 100, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        {row.fullname}
+                      </TableCell>
+                      <TableCell sx={{ maxWidth: 100, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        {row.email}
+                      </TableCell>
+                      <TableCell sx={{ maxWidth: 100 }}>{row.telephone}</TableCell>
+                      <TableCell sx={{ maxWidth: 100 }}>{row.role}</TableCell>
+                      <TableCell sx={{ maxWidth: 130, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        {row.department.join(' ')}
+                      </TableCell>
+                      <TableCell sx={{ maxWidth: 130, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        {row.businessUnit.join(' ')}
+                      </TableCell>
+                      <TableCell sx={{ maxWidth: 100 }}>
+                        <Button
+                          variant="contained"
+                          color={row.status === 'Enable' ? 'success' : 'error'}
+                          onClick={() => toggleStatus(row.empId)}
+                          size="small"
+                        >
+                          {row.status}
+                        </Button>
+                      </TableCell>
+                      <TableCell sx={{ maxWidth: 100 }}>
+                        <Button
+                          variant="outlined"
+                          color="primary"
+                          onClick={() => handleOpenEdit(row)}
+                          size="small"
+                        >
+                          Update
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
 
           </Box>
         </Box>
@@ -287,32 +293,67 @@ function Home() {
             <InputLabel>Department</InputLabel>
             <Select
               multiple
-              value={newUser.department}
-              onChange={(e) => setNewUser({ ...newUser, department: e.target.value })}
+              value={tempDepartments}
+              onChange={(e) => setTempDepartments(e.target.value)}
+              open={deptSelectorOpen}
+              onClose={() => setDeptSelectorOpen(false)}
+              onOpen={() => setDeptSelectorOpen(true)}
               input={<OutlinedInput label="Department" />}
-              renderValue={(selected) => selected.join(', ')}
+              // renderValue={(selected) => selected.join(' ')}
             >
               {departments.map((dept) => (
                 <MenuItem key={dept} value={dept}>
+                  <Checkbox checked={tempDepartments.indexOf(dept) > -1} />
                   {dept}
                 </MenuItem>
               ))}
+              <MenuItem>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                  onClick={() => {
+                    setNewUser((prev) => ({ ...prev, department: tempDepartments }));
+                    setDeptSelectorOpen(false);
+                  }}
+                >
+                  Done
+                </Button>
+              </MenuItem>
             </Select>
           </FormControl>
+
           <FormControl fullWidth margin="dense">
             <InputLabel>Business Unit</InputLabel>
             <Select
               multiple
-              value={newUser.businessUnit}
-              onChange={(e) => setNewUser({ ...newUser, businessUnit: e.target.value })}
+              value={tempBusinessUnits}
+              onChange={(e) => setTempBusinessUnits(e.target.value)}
+              open={businessUnitSelectorOpen}
+              onClose={() => setBusinessUnitSelectorOpen(false)}
+              onOpen={() => setBusinessUnitSelectorOpen(true)}
               input={<OutlinedInput label="Business Unit" />}
-              renderValue={(selected) => selected.join(', ')}
+              renderValue={(selected) => selected.join(' ')}
             >
               {businessUnits.map((unit) => (
                 <MenuItem key={unit} value={unit}>
+                  <Checkbox checked={tempBusinessUnits.indexOf(unit) > -1} />
                   {unit}
                 </MenuItem>
               ))}
+              <MenuItem>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                  onClick={() => {
+                    setNewUser((prev) => ({ ...prev, businessUnit: tempBusinessUnits }));
+                    setBusinessUnitSelectorOpen(false);
+                  }}
+                >
+                  Done
+                </Button>
+              </MenuItem>
             </Select>
           </FormControl>
         </DialogContent>
