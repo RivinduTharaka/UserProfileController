@@ -120,7 +120,7 @@ const Loginpage = () => {
           >
             Login
           </Button>
-          <Link
+          {/* <Link
             href="#"
             variant="body2"
             sx={{
@@ -131,7 +131,7 @@ const Loginpage = () => {
             }}
           >
             Forgot password?
-          </Link>
+          </Link> */}
         </Box>
       </StyledPaper>
     </Box>
